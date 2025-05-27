@@ -39,8 +39,13 @@ const RoomPage = ()=> {
     },[socket]);
 
     const sendStreams = useCallback(()=> {
-        for(const track of myStream.getTracks()) {
-             peer.peer.addTrack(track,myStream);
+        const senders = peer.peer.getSenders();
+        const tracks = myStream.getTracks();
+        for(const track of tracks) {
+            const isTrackAlreadyAdded = senders.some(sender => sender.track?.id === track.id);
+            if (!isTrackAlreadyAdded) {
+                peer.peer.addTrack(track, myStream);
+            }
         }
     },[myStream])
 
@@ -65,15 +70,15 @@ const RoomPage = ()=> {
     },[]);
 
     useEffect(()=> {
-        peer.peer.addEventListener("negotiation needed", handleNegotiationNeeded);
+        peer.peer.addEventListener("negotiationneeded", handleNegotiationNeeded);
         return ()=> {
-            peer.peer.removeEventListener("negotiation needed", handleNegotiationNeeded);
+            peer.peer.removeEventListener("negotiationneeded", handleNegotiationNeeded);
         }
     },[handleNegotiationNeeded])
 
     useEffect(()=> {
-        peer.peer.addEventListener("track", async event=> {
-            const remoteStream = event.streams
+        peer.peer.addEventListener("track", async (ev)=> {
+            const remoteStream = ev.streams;
             setRemoteStream(remoteStream[0]);
         });
 
@@ -84,14 +89,14 @@ const RoomPage = ()=> {
         socket.on("incoming:call", handleIncomingCall);
         socket.on("call:accepted",handleCallAccepted);
         socket.on("peer:nego:needed", handleNegotiationIncoming);
-        socket.on("peer:nego:final", handleNegotiationFinal);
+        socket.on("peer:nego:done", handleNegotiationFinal);
 
         return ()=> {
             socket.off("user:joined",handleUserJoined);
             socket.off("incoming:call", handleIncomingCall);
             socket.off("call:accepted",handleCallAccepted);
             socket.off("peer:nego:needed", handleNegotiationIncoming);
-            socket.off("peer:nego:final", handleNegotiationFinal);
+            socket.off("peer:nego:done", handleNegotiationFinal);
         }
     },[socket,handleUserJoined,handleIncomingCall,handleCallAccepted,handleNegotiationIncoming,handleNegotiationFinal]);
 
