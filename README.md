@@ -2,6 +2,10 @@
 
 A real-time video conferencing web application built with React, Express, Socket.io and Peer.js, enabling seamless peer-to-peer communication with WebRTC.
 
+# Demo 
+
+https://github.com/user-attachments/assets/316e9ec2-6fe1-48fa-a987-e75fd3d02c5c
+
 # Tech Stack
 
 - **Frontend**: React (with hooks for state management)
