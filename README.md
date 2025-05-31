@@ -4,7 +4,7 @@ A real-time video conferencing web application built with React, Express, Socket
 
 # Demo 
 
-https://github.com/user-attachments/assets/316e9ec2-6fe1-48fa-a987-e75fd3d02c5c
+https://github.com/user-attachments/assets/15db0477-0042-4f3f-9e2e-bff9d97ec1db
 
 # Tech Stack
 
