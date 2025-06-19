@@ -1,6 +1,23 @@
 const {Server} = require("socket.io");
 const port = process.env.PORT || 8000;
 
+const url = process.env.CLIENT_URL || "http://localhost:5000";
+const interval = 30000;
+
+function reloadWebsite() {
+  axios
+    .get(url)
+    .then((response) => {
+      console.log("website reloaded");
+    })
+    .catch((error) => {
+      console.error(`Error : ${error.message}`);
+    });
+}
+
+setInterval(reloadWebsite, interval);
+
+
 const io = new Server(port, {
     cors: {
         origin: process.env.CLIENT_URL,
